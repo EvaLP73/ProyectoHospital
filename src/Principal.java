@@ -1,5 +1,3 @@
-package proyectoHospital;
-
 import java.io.IOException;
 import java.sql.*;
 import java.util.*;
@@ -703,5 +701,7 @@ public class Principal {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
     }
+
 }
