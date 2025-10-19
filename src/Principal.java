@@ -1,5 +1,7 @@
 import java.io.IOException;
 import java.sql.*;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.*;
 
 public class Principal {
@@ -40,11 +42,13 @@ public class Principal {
 
             switch (opcion) {
                 case 1:
-                    System.out.print("Introduce el nombre de la categoría: ");
-                    String categoria = sc.nextLine();
-                    crearCategoria(categoria);
+                    System.out.print("Introduce el nombre de la especialidad: ");
+                    String especialidad = sc.nextLine();
+                    crearEspecialidad(especialidad);
                     break;
                 case 2:
+                    System.out.print("Introduce el nombre del medico: ");
+                    String medico= sc.nextLine();
                     System.out.print("Introduce el nombre del contacto: ");
                     String contacto = sc.nextLine();
                     System.out.print("Introduce el nif del contacto: ");
@@ -54,13 +58,13 @@ public class Principal {
                     sc.nextLine();
                     System.out.print("Introduce el mail del contacto: ");
                     String mail = sc.nextLine();
-                    crearNuevoProveedor(contacto, nif, telefono, mail);
+                    crearMedico(medico, contacto, nif, telefono, mail);
                     break;
                 case 3:
-                    System.out.print("Introduce el id del proveedor a eliminar: ");
+                    System.out.print("Introduce el id del medico a eliminar: ");
                     try{
                         int id = sc.nextInt();
-                        eliminarProveedor(id);
+                        eliminarMedico(id);
                     } catch (java.util.InputMismatchException e) {
                         // Si ocurre una excepción, mostramos un mensaje de error
                         System.out.println("¡Error! Debes introducir un número entero válido.\n");
@@ -70,19 +74,20 @@ public class Principal {
                     }
                     break;
                 case 4:
-                    System.out.print("Introduce el nombre del usuario: ");
-                    String usuario = sc.nextLine();
-                    System.out.print("Introduce el mail del usuario: ");
-                    String mailUsuario = sc.nextLine();
-                    System.out.print("Introduce el año de nacimiento del usuario: ");
-                    int nacimiento = sc.nextInt();
-                    crearUsuario(usuario, mailUsuario, nacimiento);
+                    System.out.print("Introduce el nombre del paciente: ");
+                    String paciente = sc.nextLine();
+                    System.out.print("Introduce el mail del paciente: ");
+                    String mailPaciente = sc.nextLine();
+                    System.out.print("Introduce la fecha(YYYY-MM-DD) de nacimiento del paciente: ");
+                    String fecha_nacimiento = sc.nextLine();
+                    LocalDate fechaNacimiento = LocalDate.parse(fecha_nacimiento);
+                    crearPaciente(paciente, mailPaciente, fechaNacimiento);
                     break;
                 case 5:
-                    System.out.print("Introduce el id del usuario a eliminar: ");
+                    System.out.print("Introduce el id del paciente a eliminar: ");
                     try{
-                        int idUsuario = sc.nextInt();
-                        eliminarUsuario(idUsuario);
+                        int idPaciente = sc.nextInt();
+                        eliminarPaciente(idPaciente);
                     } catch (java.util.InputMismatchException e) {
                         // Si ocurre una excepción, mostramos un mensaje de error
                         System.out.println("¡Error! Debes introducir un número entero válido.\n");
@@ -92,54 +97,50 @@ public class Principal {
                     }
                     break;
                 case 6:
-                    System.out.print("Introduce el nombre del producto: ");
-                    String nombreProducto = sc.nextLine();
-                    System.out.print("Introduce el precio del producto: ");
-                    Double precio = sc.nextDouble();
-                    System.out.print("Introduce el stock del producto: ");
-                    int stock = sc.nextInt();
-                    sc.nextLine();
-                    System.out.print("Introduce el nombre de la categoría del producto: ");
-                    String nombreCategoria = sc.nextLine();
-                    System.out.print("Introduce el nif del contacto del proveedor: ");
-                    String nifProveedor = sc.nextLine();
-                    crearProducto(nombreProducto, precio, stock, nombreCategoria, nifProveedor);
+                    System.out.print("Introduce el nombre del tratamiento: ");
+                    String nombre = sc.nextLine();
+                    System.out.print("Introduce descripcion del tratamiento: ");
+                    String descripcion = sc.nextLine();
+                    System.out.print("Introduce el nombre de la especialidad del tratamiento: ");
+                    String nombreEspecialidad = sc.nextLine();
+                    System.out.print("Introduce el nif del contacto del medico: ");
+                    String nifMedico = sc.nextLine();
+                    crearTratamiento(nombre, descripcion, nombreEspecialidad, nifMedico);
                     break;
                 case 7:
-                    System.out.print("Introduce el nombre del producto que quieres eliminar: ");
-                    String productoEliminar = sc.nextLine();
-                    eliminarProductoPorNombre(productoEliminar);
+                    System.out.print("Introduce el nombre del tratamiento que quieres eliminar: ");
+                    String nombreTratamiento = sc.nextLine();
+                    eliminarTratamientoPorNombre(nombreTratamiento);
                     break;
                 case 8:
-                    System.out.print("Introduce cual es el stock bajo del producto: ");
+                    System.out.print("Introduce cual es la cantidad mínima que hay del tratamiento: ");
                     try{
                         int minimo = sc.nextInt();
-                        listarProductosBajoStock(minimo);
+                        listarTratamientosConPocosPacientes(minimo);
                     } catch (java.util.InputMismatchException e) {
                         // Si ocurre una excepción, mostramos un mensaje de error
                         System.out.println("¡Error! Debes introducir un número entero válido.\n");
-
                         // Limpiamos el buffer del Scanner
                         sc.nextLine(); // Consumimos el salto de línea residual
                     }
                     break;
                 case 9:
-                    obtenerTotalPedidosUsuarios();
+                    obtenerTotalCitasPorPaciente();
                     break;
                 case 10:
-                    obtenerCantidadProductosEnCadaAlmacen();
+                    obtenerCantidadTratamientosPorSala();
                     break;
                 case 11:
-                    listarTodosProductosConCategoriaYProveedor();
+                    listarTratamientosConEspecialidadYMedico();
                     break;
                 case 12:
-                    System.out.print("Introduce el id de la categoría de los productos comprados: ");
+                    System.out.print("Introduce el id de la especialidad de los tratamientos contratados: ");
                     try {
                         // Intentamos leer un número entero
-                        int cat = sc.nextInt();
+                        int esp = sc.nextInt();
 
                         // Si no hay excepciones, se llama a la función
-                        obtenerUsuariosCompraronProductosCategoria(cat);
+                        obtenerPacientesPorEspecialidad(esp);
                     } catch (java.util.InputMismatchException e) {
                         // Si ocurre una excepción, mostramos un mensaje de error
                         System.out.println("¡Error! Debes introducir un número entero válido.\n");
@@ -177,22 +178,22 @@ public class Principal {
         }
     }
     //1
-    public static void crearCategoria(String nombreCategoria) {
+    public static void crearEspecialidad(String nombreEspecialidad) {
         PreparedStatement ps = null;
 
         try {
-            String sql = "INSERT INTO categorias (nombre_categoria) VALUES (?)";
+            String sql = "INSERT INTO hospital.especialidad (nombre_especialidad) VALUES (?)";
 
             ps = SingletonPostgre.connection.prepareStatement(sql);
-            ps.setString(1, nombreCategoria); // Asignar el parámetro de la categoría
+            ps.setString(1, nombreEspecialidad); // Asignar el parámetro de la especialidad
 
             // Ejecutar la consulta de inserción
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected > 0) {
-                System.out.println("La categoría '" + nombreCategoria + "' se ha creado exitosamente.\n");
+                System.out.println("La especialidad '" + nombreEspecialidad + "' se ha creado exitosamente.\n");
             } else {
-                System.out.println("No se pudo crear la categoría.");
+                System.out.println("No se pudo crear la especialidad.");
             }
 
         } catch (SQLException e) {
@@ -200,17 +201,17 @@ public class Principal {
         }
     }
     //2
-    public static void crearNuevoProveedor(String nombreProveedor, String nif, int telefono, String email) {
+    public static void crearMedico(String nombreMedico, String nombreContacto, String nif, int telefono, String email) {
         PreparedStatement ps = null;
-
+        //"INSERT INTO hospital.medicos (nombre_medico, contacto) VALUES (?, ROW(?, ?, ?, ?)::hospital.datos_contacto)";
         try {
-            // SQL para insertar el nuevo proveedor
-            String sql = "INSERT INTO proveedores (nombre_proveedor, contacto) VALUES (?, ROW(?, ?, ?, ?))";
+            // SQL para insertar el nuevo medico
+            String sql = "INSERT INTO hospital.medicos (nombre_medico, contacto) VALUES (?, ROW(?, ?, ?, ?))";
 
             // Preparar el statement para evitar inyecciones SQL
             ps = SingletonPostgre.connection.prepareStatement(sql);
-            ps.setString(1, nombreProveedor); // Asignar el nombre del proveedor
-            ps.setString(2, nombreProveedor); // Asignar el nombre del proveedor
+            ps.setString(1, nombreMedico); // Asignar el nombre del medico
+            ps.setString(2, nombreContacto); // Asignar el nombre del contacto del medico
             ps.setString(3, nif); // Asignar el NIF
             ps.setInt(4, telefono); // Asignar el teléfono
             ps.setString(5, email); // Asignar el email
@@ -219,9 +220,9 @@ public class Principal {
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected > 0) {
-                System.out.println("El proveedor '" + nombreProveedor + "' se ha creado exitosamente.\n");
+                System.out.println("El medico '" + nombreMedico + "' se ha creado exitosamente.\n");
             } else {
-                System.out.println("No se pudo crear el proveedor.");
+                System.out.println("No se pudo crear el medico.");
             }
 
         } catch (SQLException e) {
@@ -229,33 +230,33 @@ public class Principal {
         }
     }
     //3
-    public static void eliminarProveedor(int id) {
+    public static void eliminarMedico(int id) {
         PreparedStatement psCheck = null;
         PreparedStatement psDelete = null;
 
         try {
-            // Primero, comprobamos si el proveedor existe con el ID proporcionado
-            String checkSql = "SELECT id_proveedor FROM proveedores WHERE id_proveedor = ?";
+            // Primero, comprobamos si el medico existe con el ID proporcionado
+            String checkSql = "SELECT id_medico FROM medicos WHERE id_medico = ?";
             psCheck = SingletonPostgre.connection.prepareStatement(checkSql);
-            psCheck.setInt(1, id); // Asignar el ID del proveedor
+            psCheck.setInt(1, id); // Asignar el ID del medico
 
             ResultSet rs = psCheck.executeQuery();
 
-            // Si el proveedor existe, procedemos a eliminarlo
+            // Si el medico existe, procedemos a eliminarlo
             if (rs.next()) {
-                String deleteSql = "DELETE FROM proveedores WHERE id_proveedor = ?";
+                String deleteSql = "DELETE FROM hospital.medicos WHERE id_medico = ?";
                 psDelete = SingletonPostgre.connection.prepareStatement(deleteSql);
-                psDelete.setInt(1, id); // Asignar el ID del proveedor a eliminar
+                psDelete.setInt(1, id); // Asignar el ID del medico a eliminar
 
                 int rowsAffected = psDelete.executeUpdate();
 
                 if (rowsAffected > 0) {
-                    System.out.println("El proveedor con ID " + id + " ha sido eliminado exitosamente.\n");
+                    System.out.println("El medico con ID " + id + " ha sido eliminado exitosamente.\n");
                 } else {
-                    System.out.println("No se pudo eliminar el proveedor.");
+                    System.out.println("No se pudo eliminar el medico.");
                 }
             } else {
-                System.out.println("El proveedor con ID " + id + " no existe.\n");
+                System.out.println("El medico con ID " + id + " no existe.\n");
             }
 
         } catch (SQLException e) {
@@ -273,268 +274,297 @@ public class Principal {
         }
     }
     //4
-    static void crearUsuario(String nombre, String email, int anho_nacimiento) {
+    static void crearPaciente(String nombre, String email, LocalDate fechaNacimiento) {
         try {
             // Insertar en MySQL
-            String sqlMySQL = "INSERT INTO usuarios (nombre, email, ano_nacimiento) VALUES (?, ?, ?)";
+            String sqlMySQL = "INSERT INTO pacientes (nombre, email, fecha_nacimiento) VALUES (?, ?, ?)";
             PreparedStatement stmtMySQL = SingletonMySQL.connection.prepareStatement(sqlMySQL, Statement.RETURN_GENERATED_KEYS);
             stmtMySQL.setString(1, nombre);
             stmtMySQL.setString(2, email);
-            stmtMySQL.setInt(3, anho_nacimiento);
+            stmtMySQL.setDate(3, Date.valueOf(fechaNacimiento));
 
             int affectedRowsMySQL = stmtMySQL.executeUpdate();
             ResultSet generatedKeysMySQL = stmtMySQL.getGeneratedKeys();
-            int idProductoMySQL = -1;
+            int idPacienteMySQL  = -1;
             if (generatedKeysMySQL.next()) {
-                idProductoMySQL = generatedKeysMySQL.getInt(1);
+                idPacienteMySQL  = generatedKeysMySQL.getInt(1);
             }
             if (affectedRowsMySQL > 0 ) {
-                System.out.println("Usuario creado exitosamente en bases de datos MySQL.\n");
+                System.out.println("Paciente creado exitosamente en bases de datos MySQL.\n");
             } else {
-                System.out.println("Error al crear el usuario en MySQL.\n");
+                System.out.println("Error al crear el paciente en MySQL.\n");
             }
         }catch(SQLException e){
             System.out.println("Error al ejecutar la consulta: " + e.getMessage());
         }
     }
     //5
-    static void eliminarUsuario(int id) {
+    static void eliminarPaciente(int id) {
         PreparedStatement psCheck = null;
-        PreparedStatement psDelete = null;
-        try {
-            // Primero, comprobamos si el proveedor existe con el ID proporcionado
-            String checkSql = "SELECT id_usuario FROM usuarios WHERE id_usuario = ?";
-            psCheck = SingletonMySQL.connection.prepareStatement(checkSql);
-            psCheck.setInt(1, id); // Asignar el ID del usuario
+        PreparedStatement ps1 = null;
+        PreparedStatement ps2 = null;
+        PreparedStatement ps3 = null;
 
+        try {
+            // Desactivar auto-commit para iniciar la transacción
+            SingletonMySQL.connection.setAutoCommit(false);
+
+            // Comprobar si existe el paciente
+            String checkSql = "SELECT id_paciente FROM pacientes WHERE id_paciente = ?";
+            psCheck = SingletonMySQL.connection.prepareStatement(checkSql);
+            psCheck.setInt(1, id);
             ResultSet rs = psCheck.executeQuery();
 
-            // Si el proveedor existe, procedemos a eliminarlo
             if (rs.next()) {
-                PreparedStatement ps = SingletonMySQL.connection.prepareStatement("DELETE FROM pedidos_productos WHERE id_pedido IN (SELECT id_pedido FROM pedidos WHERE id_usuario = ?);");
-                PreparedStatement ps2 = SingletonMySQL.connection.prepareStatement("DELETE FROM pedidos WHERE id_usuario = ?;");
-                PreparedStatement ps3 = SingletonMySQL.connection.prepareStatement("DELETE FROM usuarios WHERE id_usuario = ?;");
-                ps.setInt(1, id);
+                // Eliminar de pacientes_tratamientos
+                ps1 = SingletonMySQL.connection.prepareStatement("DELETE FROM pacientes_tratamientos WHERE id_paciente = ?");
+                ps1.setInt(1, id);
+                ps1.executeUpdate();
+
+                // Eliminar de citas
+                ps2 = SingletonMySQL.connection.prepareStatement("DELETE FROM citas WHERE id_paciente = ?");
                 ps2.setInt(1, id);
-                ps3.setInt(1, id);
-                ps.executeUpdate();
                 ps2.executeUpdate();
+
+                // Eliminar de pacientes
+                ps3 = SingletonMySQL.connection.prepareStatement("DELETE FROM pacientes WHERE id_paciente = ?");
+                ps3.setInt(1, id);
                 ps3.executeUpdate();
-                System.out.println("Usuario eliminado con exito\n");
+
+                // Si todo fue bien, confirmar la transacción
+                SingletonMySQL.connection.commit();
+                System.out.println("Paciente eliminado con éxito.\n");
 
             } else {
-                System.out.println("El usuario con ID " + id + " no existe.\n");
+                System.out.println("El paciente con ID " + id + " no existe.\n");
+                SingletonMySQL.connection.rollback(); // Por si acaso, aunque no se hicieron cambios
             }
 
         } catch (SQLException e) {
-            System.out.println("Error al ejecutar la consulta: " + e.getMessage());
-
+            System.out.println("Error durante la operación: " + e.getMessage());
+            try {
+                // Revertir cambios si algo falla
+                SingletonMySQL.connection.rollback();
+                System.out.println("Transacción revertida.\n");
+            } catch (SQLException rollbackEx) {
+                System.out.println("Error al revertir la transacción: " + rollbackEx.getMessage());
+            }
         } finally {
-            // Cerrar los recursos de forma segura
             try {
+                // Restaurar auto-commit
+                SingletonMySQL.connection.setAutoCommit(true);
+
                 if (psCheck != null) psCheck.close();
-                if (psDelete != null) psDelete.close();
+                if (ps1 != null) ps1.close();
+                if (ps2 != null) ps2.close();
+                if (ps3 != null) ps3.close();
+
             } catch (SQLException e) {
-                System.out.println("Error al cerrar los recursos: " + e.getMessage());
+                System.out.println("Error al cerrar recursos: " + e.getMessage());
             }
         }
     }
-    //6
-    static void crearProducto(String nombre, Double precio, int stock, String nombre_categoria, String nif) {
-        // Primero obtenemos el id_categoria y id_proveedor desde PostgreSQL
-        int idCategoria = obtenerIdCategoria(nombre_categoria);
-        int idProveedor = obtenerIdProveedor(nif);
 
-        if (idCategoria != -1 && idProveedor != -1) {
-            try {
-                // Insertar en MySQL
-                String sqlMySQL = "INSERT INTO productos (nombre_producto, precio, stock) VALUES (?, ?, ?)";
-                PreparedStatement stmtMySQL = SingletonMySQL.connection.prepareStatement(sqlMySQL, Statement.RETURN_GENERATED_KEYS);
-                stmtMySQL.setString(1, nombre);
-                stmtMySQL.setDouble(2, precio);
-                stmtMySQL.setInt(3, stock);
+    //6 Crear un nuevo tratamiento (con inserción sincronizada en ambas bases de datos)
+    public static void crearTratamiento(String nombre, String descripcion, String nombreEspecialidad, String nifMedico) {
+        int idEspecialidad = obtenerIdEspecialidad(nombreEspecialidad);
+        int idMedico = obtenerIdMedico(nifMedico);
 
-                int affectedRowsMySQL = stmtMySQL.executeUpdate();
-                ResultSet generatedKeysMySQL = stmtMySQL.getGeneratedKeys();
-                int idProductoMySQL = -1;
-                if (generatedKeysMySQL.next()) {
-                    idProductoMySQL = generatedKeysMySQL.getInt(1);
-                }
-
-                // Insertar en PostgreSQL con el id_producto autogenerado
-                String sqlPostgreSQL = "INSERT INTO productos (id_producto, id_categoria, id_proveedor) " +
-                        "VALUES (?, ?, ?)";
-                PreparedStatement stmtPostgreSQL = SingletonPostgre.connection.prepareStatement(sqlPostgreSQL);
-                stmtPostgreSQL.setInt(1, idProductoMySQL);  // Usamos el mismo id_producto
-                stmtPostgreSQL.setInt(2, idCategoria);
-                stmtPostgreSQL.setInt(3, idProveedor);
-
-                int affectedRowsPostgreSQL = stmtPostgreSQL.executeUpdate();
-
-                // Verificar si se insertó en ambas bases de datos
-                if (affectedRowsMySQL > 0 && affectedRowsPostgreSQL > 0) {
-                    System.out.println("Producto creado exitosamente en ambas bases de datos.\n");
-                } else {
-                    System.out.println("Error al insertar el producto en alguna de las bases de datos.\n");
-                }
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        } else {
-            System.out.println("Error: No se pudo encontrar la categoría o el proveedor.\n");
+        if (idEspecialidad == -1 || idMedico == -1) {
+            System.out.println("Error: No se encontró la especialidad o el médico.");
+            return;
         }
-    }
 
-    // Obtener el id de la categoría desde PostgreSQL
-    private static int obtenerIdCategoria(String nombreCategoria) {
-        int idCategoria = -1;
+        Connection pgConn = SingletonPostgre.connection;
+        Connection mySqlConn = SingletonMySQL.connection;
 
         try {
-            String sqlPostgreSQL = "SELECT id_categoria FROM categorias WHERE nombre_categoria = ?";
+            pgConn.setAutoCommit(false);
+            mySqlConn.setAutoCommit(false);
+
+            // Insertar en MySQL
+            String sqlMySQL = "INSERT INTO tratamientos (nombre_tratamiento, descripcion) VALUES (?, ?)";
+            PreparedStatement stmtMySQL = mySqlConn.prepareStatement(sqlMySQL, Statement.RETURN_GENERATED_KEYS);
+            stmtMySQL.setString(1, nombre);
+            stmtMySQL.setString(2, descripcion);
+            int affectedRowsMySQL = stmtMySQL.executeUpdate();
+
+            ResultSet generatedKeys = stmtMySQL.getGeneratedKeys();
+            int idTratamiento = -1;
+            if (generatedKeys.next()) {
+                idTratamiento = generatedKeys.getInt(1);
+            } else {
+                throw new SQLException("No se generó ID en MySQL");
+            }
+
+            // Insertar en PostgreSQL
+            String sqlPostgre = "INSERT INTO hospital.tratamientos (id_tratamiento, id_medico, id_especialidad) VALUES (?, ?, ?)";
+            PreparedStatement stmtPostgre = pgConn.prepareStatement(sqlPostgre);
+            stmtPostgre.setInt(1, idTratamiento);
+            stmtPostgre.setInt(2, idMedico);
+            stmtPostgre.setInt(3, idEspecialidad);
+            int affectedRowsPG = stmtPostgre.executeUpdate();
+
+            if (affectedRowsMySQL > 0 && affectedRowsPG > 0) {
+                pgConn.commit();
+                mySqlConn.commit();
+                System.out.println("Tratamiento creado exitosamente con ID: " + idTratamiento);
+            } else {
+                throw new SQLException("Error al insertar en una de las bases de datos");
+            }
+
+        } catch (SQLException e) {
+            try {
+                if (pgConn != null) pgConn.rollback();
+                if (mySqlConn != null) mySqlConn.rollback();
+            } catch (SQLException rollbackEx) {
+                rollbackEx.printStackTrace();
+            }
+            e.printStackTrace();
+        }
+    }
+    // Obtener el id de la especialidad desde PostgreSQL
+    private static int obtenerIdEspecialidad(String nombreEspecialidad) {
+        int idEspecialidad = -1;
+
+        try {
+            String sqlPostgreSQL = "SELECT id_especialidad FROM especialidades WHERE nombre_especialidad = ?";
             PreparedStatement stmtPostgreSQL = SingletonPostgre.connection.prepareStatement(sqlPostgreSQL);
-            stmtPostgreSQL.setString(1, nombreCategoria);
+            stmtPostgreSQL.setString(1, nombreEspecialidad);
             ResultSet rsPostgreSQL = stmtPostgreSQL.executeQuery();
 
             if (rsPostgreSQL.next()) {
-                idCategoria = rsPostgreSQL.getInt("id_categoria");
+                idEspecialidad = rsPostgreSQL.getInt("id_especialidad");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return idCategoria;
+        return idEspecialidad;
     }
 
-    // Obtener el id del proveedor basado en el NIF desde PostgreSQL
-    private static int obtenerIdProveedor(String nif) {
-        int idProveedor = -1;
+    // Obtener el id del medico basado en el NIF desde PostgreSQL
+    private static int obtenerIdMedico(String nif) {
+        int idMedico = -1;
 
         try {
-            String sqlPostgreSQL = "SELECT id_proveedor FROM proveedores WHERE (contacto).nif = ?";
+            String sqlPostgreSQL = "SELECT id_medico FROM medicos WHERE (contacto).nif = ?";
             PreparedStatement stmtPostgreSQL = SingletonPostgre.connection.prepareStatement(sqlPostgreSQL);
             stmtPostgreSQL.setString(1, nif);
             ResultSet rsPostgreSQL = stmtPostgreSQL.executeQuery();
 
             if (rsPostgreSQL.next()) {
-                idProveedor = rsPostgreSQL.getInt("id_proveedor");
+                idMedico = rsPostgreSQL.getInt("id_medico");
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return idProveedor;
+        return idMedico;
     }
-    //7. Método para eliminar un producto por nombre en ambas bases de datos
-    public static void eliminarProductoPorNombre(String nombre) {
-        PreparedStatement psCheck = null;
-        PreparedStatement psDelete = null;
+    //7. Eliminar un tratamiento por su nombre (borrado sincronizado en ambas bases)
+    public static void eliminarTratamientoPorNombre(String nombre) {
+        Connection mysqlConn = SingletonMySQL.connection;
+        Connection pgConn = SingletonPostgre.connection;
+
         try {
-            // Obtener el id_producto desde MySQL para eliminarlo de PostgreSQL
-            String checkSql2 = "SELECT id_producto FROM productos WHERE nombre_producto = ?";
-            psCheck = SingletonMySQL.connection.prepareStatement(checkSql2);
-            psCheck.setString(1, nombre); // Asignar el nombre del producto
-            ResultSet rs2 = psCheck.executeQuery();
+            mysqlConn.setAutoCommit(false);
+            pgConn.setAutoCommit(false);
 
-            // Comprobamos si el producto existe con el nombre proporcionado
-            String checkSql = "SELECT nombre_producto FROM productos WHERE nombre_producto = ?";
-            psCheck = SingletonMySQL.connection.prepareStatement(checkSql);
-            psCheck.setString(1, nombre); // Asignar el nombre del producto
+            //Obtener ID tratamiento desde MySQL
+            String getIdSQL = "SELECT id_tratamiento FROM tratamientos WHERE nombre_tratamiento = ?";
+            PreparedStatement psGetId = mysqlConn.prepareStatement(getIdSQL);
+            psGetId.setString(1, nombre);
+            ResultSet rs = psGetId.executeQuery();
 
-            ResultSet rs = psCheck.executeQuery();
-
-
-            // Si el producto existe, procedemos a eliminarlo
-            if (rs.next()) {
-                // Consulta para eliminar las relaciones en la tabla pedidos_productos
-                String deletePedidosProductos = "DELETE FROM pedidos_productos WHERE id_producto IN (SELECT id_producto FROM productos WHERE nombre_producto = ?)";
-                PreparedStatement stmtMySQL1 = SingletonMySQL.connection.prepareStatement(deletePedidosProductos);
-                stmtMySQL1.setString(1, nombre);
-                stmtMySQL1.executeUpdate(); // Usar executeUpdate() para DELETE
-
-                // Eliminar el producto de la tabla productos
-                String deleteProducto = "DELETE FROM productos WHERE nombre_producto = ?";
-                PreparedStatement stmtMySQL2 = SingletonMySQL.connection.prepareStatement(deleteProducto);
-                stmtMySQL2.setString(1, nombre);
-                stmtMySQL2.executeUpdate(); // Usar executeUpdate() para DELETE
-
-                System.out.println("Producto eliminado de MySQL: " + nombre);
-            } else {
-                System.out.println("El producto con nombre " + nombre + " no existe en la base de datos MySQL");
+            if (!rs.next()) {
+                System.out.println("Tratamiento no encontrado en MySQL: " + nombre);
+                return;
             }
 
-            if (rs2.next()) {
-                int idProducto = rs2.getInt("id_producto");
-                // Ahora verificar si el id_producto existe en PostgreSQL
-                String checkSqlPostgres = "SELECT id_producto FROM productos WHERE id_producto = ?";
-                PreparedStatement psCheckPostgres = SingletonPostgre.connection.prepareStatement(checkSqlPostgres);
+            int idTratamiento = rs.getInt("id_tratamiento");
 
-                // Asignar el id_producto obtenido de MySQL
-                psCheckPostgres.setInt(1, idProducto);
+            //Eliminar de tabla pacientes_tratamientos (relaciones)
+            String deletePacientesTratamientos = "DELETE FROM pacientes_tratamientos WHERE id_tratamiento = ?";
+            PreparedStatement psDeletePT = mysqlConn.prepareStatement(deletePacientesTratamientos);
+            psDeletePT.setInt(1, idTratamiento);
+            psDeletePT.executeUpdate();
 
-                // Ejecutar la consulta en PostgreSQL
-                ResultSet rsPostgres = psCheckPostgres.executeQuery();
+            //Eliminar tratamiento en MySQL
+            String deleteMySQL = "DELETE FROM tratamientos WHERE id_tratamiento = ?";
+            PreparedStatement psDeleteMySQL = mysqlConn.prepareStatement(deleteMySQL);
+            psDeleteMySQL.setInt(1, idTratamiento);
+            psDeleteMySQL.executeUpdate();
 
-                // Verificar si el id_producto existe en PostgreSQL
-                if (rsPostgres.next()) {
-                    // El id_producto existe en PostgreSQL
-                    // Eliminar las relaciones en almacenes_productos en PostgreSQL
-                    String deleteAlmacenesProductos = "DELETE FROM almacenes_productos WHERE id_producto = ?";
-                    PreparedStatement stmtPostgreSQL2 = SingletonPostgre.connection.prepareStatement(deleteAlmacenesProductos);
-                    stmtPostgreSQL2.setInt(1, idProducto);
-                    stmtPostgreSQL2.executeUpdate();
+            System.out.println("Tratamiento eliminado en MySQL: " + nombre);
 
-                    // Eliminar el producto de la tabla productos en PostgreSQL
-                    String deleteProductos = "DELETE FROM productos WHERE id_producto = ?";
-                    PreparedStatement stmtPostgreSQL3 = SingletonPostgre.connection.prepareStatement(deleteProductos);
-                    stmtPostgreSQL3.setInt(1, idProducto);
-                    stmtPostgreSQL3.executeUpdate();
+            //Eliminar de salas_tratamientos en PostgreSQL
+            String deleteSalasTratamientos = "DELETE FROM hospital.salas_tratamientos WHERE id_tratamiento = ?";
+            PreparedStatement psDeleteSalas = pgConn.prepareStatement(deleteSalasTratamientos);
+            psDeleteSalas.setInt(1, idTratamiento);
+            psDeleteSalas.executeUpdate();
 
-                    System.out.println("Producto eliminado de PostgreSQL: " + nombre+"\n");
-                } else {
-                    System.out.println("Producto no encontrado en PostgreSQL: " + nombre + "\n");
-                }
-            }
+            //Eliminar tratamiento en PostgreSQL
+            String deletePostgreSQL = "DELETE FROM hospital.tratamientos WHERE id_tratamiento = ?";
+            PreparedStatement psDeletePG = pgConn.prepareStatement(deletePostgreSQL);
+            psDeletePG.setInt(1, idTratamiento);
+            psDeletePG.executeUpdate();
+
+            System.out.println("Tratamiento eliminado en PostgreSQL: " + nombre);
+
+            //Commit en ambas BD
+            mysqlConn.commit();
+            pgConn.commit();
+
         } catch (SQLException e) {
-            System.out.println("Error al ejecutar la consulta: " + e.getMessage());
-
-        } finally {
-            // Cerrar los recursos de forma segura
             try {
-                if (psCheck != null) psCheck.close();
-                if (psDelete != null) psDelete.close();
-                //if (SingletonPostgre.connection != null) SingletonPostgre.connection.close();
-            } catch (SQLException e) {
-                System.out.println("Error al cerrar los recursos: " + e.getMessage());
+                if (mysqlConn != null) mysqlConn.rollback();
+                if (pgConn != null) pgConn.rollback();
+            } catch (SQLException rollbackEx) {
+                rollbackEx.printStackTrace();
             }
+            System.out.println("Error eliminando tratamiento: " + e.getMessage());
         }
     }
+
     //8
-    static void listarProductosBajoStock(int stock) {
+    static void listarTratamientosConPocosPacientes(int cantidad) {
+        String sql = """
+                SELECT 
+                    t.id_tratamiento, 
+                    t.nombre_tratamiento, 
+                    t.descripcion, 
+                    COUNT(pt.id_paciente) AS cantidad
+                FROM tratamientos t
+                LEFT JOIN pacientes_tratamientos pt ON t.id_tratamiento = pt.id_tratamiento
+                GROUP BY t.id_tratamiento
+                HAVING COUNT(pt.id_paciente) < ?
+            """;
         try {
-            PreparedStatement ps = SingletonMySQL.connection.prepareStatement("SELECT id_producto, nombre_producto, precio, stock FROM productos WHERE stock < ?");
-            ps.setInt(1, stock);
+            PreparedStatement ps = SingletonMySQL.connection.prepareStatement(sql);
+            ps.setInt(1, cantidad);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                System.out.println("Nombre: "+ rs.getString("nombre_producto") +"\nStock: " + rs.getInt("stock")+"\n");
+                System.out.println("Nombre: "+ rs.getString("nombre_tratamiento") +"\nCantidad: " + rs.getInt("cantidad")+"\n");
             }
         } catch (SQLException e) {
-            System.out.println("Error al hacer la consulta");
+            System.out.println("Error al hacer la consulta"+ e.getMessage());
         }
     }
     //9
-    static void obtenerTotalPedidosUsuarios(){
+    static void obtenerTotalCitasPorPaciente(){
         try {
-            PreparedStatement ps = SingletonMySQL.connection.prepareStatement("SELECT u.nombre, COUNT(p.id_pedido) AS total_pedidos\n" +
-                    "FROM usuarios u\n" +
-                    "LEFT JOIN pedidos p ON u.id_usuario = p.id_usuario\n" +
-                    "GROUP BY u.id_usuario;");
+            PreparedStatement ps = SingletonMySQL.connection.prepareStatement("SELECT p.nombre, COUNT(c.id_cita) AS total_citas\n" +
+                    "FROM pacientes p\n" +
+                    "LEFT JOIN citas c ON p.id_paciente = c.id_paciente\n" +
+                    "GROUP BY t.id_tratamiento, t.nombre_tratamiento, t.descripcion\n" +
+                    "ORDER BY total_citas DESC;");
 
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
-                String nombreUsuario = rs.getString("nombre");  // Nombre del usuario
-                int totalPedidos = rs.getInt("total_pedidos");  // Total de pedidos
+                String nombrePaciente = rs.getString("nombre");  // Nombre del paciente
+                int totalCitas = rs.getInt("total_citas");  // Total de citas
                 // Imprimir los resultados
-                System.out.println("Nombre: " + nombreUsuario + "\nTotal Pedidos: " + totalPedidos + "\n");
+                System.out.println("Nombre: " + nombrePaciente + "\nTotal citas: " + totalCitas + "\n");
             }
 
         } catch (SQLException e) {
@@ -542,97 +572,88 @@ public class Principal {
         }
     }
     //10
-    static void obtenerCantidadProductosEnCadaAlmacen(){
+    static void obtenerCantidadTratamientosPorSala(){
         try {
-            PreparedStatement ps = SingletonPostgre.connection.prepareStatement("SELECT a.nombre_almacen, SUM(ap.cantidad) AS total_productos\n" +
-                    "        FROM almacenes a\n" +
-                    "        JOIN almacenes_productos ap ON a.id_almacen = ap.id_almacen\n" +
-                    "        GROUP BY a.id_almacen");
-
+            String sql = "SELECT s.nombre_sala, COUNT(st.id_tratamiento) AS total_tratamientos " +
+                    "FROM hospital.salas s " +
+                    "JOIN hospital.salas_tratamientos st ON s.id_sala = st.id_sala " +
+                    "GROUP BY s.nombre_sala " +
+                    "ORDER BY s.nombre_sala";
+            PreparedStatement ps = SingletonPostgre.connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
+
             while(rs.next()) {
-                String nombreAlmacen = rs.getString("nombre_almacen");  // Nombre del usuario
-                int totalProductos = rs.getInt("total_productos");  // Total de pedidos
-                // Imprimir los resultados
-                System.out.println("Almacén: " + nombreAlmacen + "\nTotal productos: " + totalProductos + "\n");
+                String nombreSala = rs.getString("nombre_sala");
+                int totalTratamientos = rs.getInt("total_tratamientos");
+                System.out.println("Sala: " + nombreSala + "\nTotal tratamientos: " + totalTratamientos + "\n");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
     //11
-    static void listarTodosProductosConCategoriaYProveedor(){
+    static void listarTratamientosConEspecialidadYMedico(){
         try {
-            // Consulta en PostgreSQL (para obtener proveedores, categorías y productos)
-            String sqlPostgreSQL = "SELECT \n" +
-                    "    p.id_producto, \n" +
-                    "    pr.nombre_proveedor, \n" +
-                    "    (contacto).nombre_contacto, \n"+
-                    "    (contacto).nif, \n"+
-                    "    (contacto).telefono, \n"+
-                    "    (contacto).email, \n"+
-                    "    c.nombre_categoria\n" +
-                    "FROM \n" +
-                    "    productos p\n" +
-                    "JOIN \n" +
-                    "    proveedores pr ON p.id_proveedor = pr.id_proveedor\n" +
-                    "JOIN \n" +
-                    "    categorias c ON p.id_categoria = c.id_categoria";
+            // Consulta en PostgreSQL (para obtener medicos, especialidades y tratamientos)
+            String sqlPostgreSQL =
+                    "SELECT t.id_tratamiento, m.nombre_medico,"+
+                        "(m.contacto).nombre_contacto,"+
+                        "(m.contacto).nif,"+
+                        "(m.contacto).telefono,"+
+                        "(m.contacto).email,"+
+                        "e.nombre_espacialidad"+
+                    "FROM hospital.tratamientos t"+
+                    "JOIN hospital.medicos m ON t.id_medico = m.id_medico"+
+                    "JOIN hospital.especialidades e ON t.id_especialidad = e.id_especialidad";
 
             Statement stmtPostgreSQL = SingletonPostgre.connection.createStatement();
             ResultSet rsPostgreSQL = stmtPostgreSQL.executeQuery(sqlPostgreSQL);
 
-            // Consulta en MySQL (para obtener precio y stock de los productos)
-            String sqlMySQL = "SELECT id_producto, nombre_producto, precio, stock FROM productos";
+            // Consulta en MySQL (para obtener tratamiento y descripcion)
+            String sqlMySQL = "SELECT id_tratamiento, nombre_tratamiento, descripcion FROM tratamientos";
             Statement stmtMySQL = SingletonMySQL.connection.createStatement();
             ResultSet rsMySQL = stmtMySQL.executeQuery(sqlMySQL);
 
-            // Mapa para almacenar productos por id_producto para unir los resultados
-            Map<Integer, String> productosMySQL = new HashMap<>();
-            Map<Integer, Double> preciosMySQL = new HashMap<>();
-            Map<Integer, Integer> stockMySQL = new HashMap<>();
+            // Mapa para tratamientos por id_tratamiento para unir los resultados
+            Map<Integer, String> tratamientoMySQL = new HashMap<>();
+            Map<Integer, String> descripcionMySQL = new HashMap<>();
 
             // Guardar los datos de MySQL
             while (rsMySQL.next()) {
-                int idProducto = rsMySQL.getInt("id_producto");
-                String nombreProducto = rsMySQL.getString("nombre_producto");
-                double precio = rsMySQL.getDouble("precio");
-                int stock = rsMySQL.getInt("stock");
-                productosMySQL.put(idProducto, nombreProducto);
-                preciosMySQL.put(idProducto, precio);
-                stockMySQL.put(idProducto, stock);
+                int idTratamiento = rsMySQL.getInt("id_tratamiento");
+                String nombreTratamiento = rsMySQL.getString("nombre_tratamiento");
+                String descripcion = rsMySQL.getString("descripcion");
+                tratamientoMySQL.put(idTratamiento, nombreTratamiento);
+                descripcionMySQL.put(idTratamiento, descripcion);
             }
 
             // Ahora mostramos los resultados combinados de PostgreSQL y MySQL
             while (rsPostgreSQL.next()) {
-                int idProducto = rsPostgreSQL.getInt("id_producto");
-                String categoria = rsPostgreSQL.getString("nombre_categoria");
-                String nombreProveedor = rsPostgreSQL.getString("nombre_proveedor");
+                int idTratamiento = rsPostgreSQL.getInt("id_tratamiento");
+                String especialidad = rsPostgreSQL.getString("nombre_especialidad");
+                String nombreMedico = rsPostgreSQL.getString("nombre_medico");
                 String nombreContacto = rsPostgreSQL.getString("nombre_contacto");
                 String nif = rsPostgreSQL.getString("nif");
                 int telefono = rsPostgreSQL.getInt("telefono");
                 String email = rsPostgreSQL.getString("email");
 
                 // Combinamos la información de ambas bases de datos
-                String nombreProductoMySQL = productosMySQL.get(idProducto);
-                Double precio = preciosMySQL.get(idProducto);
-                if (precio != null) {
-                    int stock = stockMySQL.get(idProducto);
-
+                String nombreTratamiento = tratamientoMySQL.get(idTratamiento);
+                String descripcion = descripcionMySQL.get(idTratamiento);
+                if (nombreTratamiento != null && descripcion != null) {
                     // Mostrar los resultados combinados
-                    System.out.println("Producto: " + nombreProductoMySQL);
-                    System.out.println("Categoría: " + categoria);
-                    System.out.println("Proveedor: " + nombreProveedor);
-                    System.out.println("Nombre del contacto del proveedor: " + nombreContacto);
+                    System.out.println("Tratamiento: " + nombreTratamiento);
+                    System.out.println("Especialidad: " + especialidad);
+                    System.out.println("Medico: " + nombreMedico);
+                    System.out.println("Nombre del contacto del medico: " + nombreContacto);
                     System.out.println("NIF: " + nif);
                     System.out.println("Teléfono: " + telefono);
                     System.out.println("Email: " + email);
-                    System.out.println("Precio: " + precio);
-                    System.out.println("Stock: " + stock);
+                    System.out.println("Descripcion: " + descripcion);
                     System.out.println("----------------------------------------");
                 } else {
-                    // Manejar el caso cuando el precio es null
-                    System.out.println("No se encontraron datos para el producto con ID: " + idProducto);
+                    // Manejar el caso cuando el tratamiento sea null
+                    System.out.println("No se encontraron datos para el tratamiento con ID: " + idTratamiento);
                 }
             }
 
@@ -641,67 +662,72 @@ public class Principal {
         }
     }
     //12
-    static void obtenerUsuariosCompraronProductosCategoria(int idCategoria) {
+    static void obtenerPacientesPorEspecialidad(int idEspecialidad) {
         try {
-            // Paso 1: Obtener los productos de PostgreSQL para la categoría dada
-            String queryPostgreSQL = "SELECT id_producto FROM productos WHERE id_categoria = ?";
-            PreparedStatement stmtPostgreSQL = SingletonPostgre.connection.prepareStatement(queryPostgreSQL);
-            stmtPostgreSQL.setInt(1, idCategoria);
+            // Paso 1: Obtener los tratamientos de PostgreSQL para la especialidad dada
+            String sqlPostgre = "SELECT id_tratamiento FROM hospital.tratamientos WHERE id_especialidad = ?";
+            PreparedStatement stmtPostgreSQL = SingletonPostgre.connection.prepareStatement(sqlPostgre);
+            stmtPostgreSQL.setInt(1, idEspecialidad);
             ResultSet rsPostgreSQL = stmtPostgreSQL.executeQuery();
 
-            // Crear una lista de id_producto de PostgreSQL
-            List<Integer> productos = new ArrayList<>();
+            // Crear una lista de id_tratamiento de PostgreSQL
+            List<Integer> tratamientosIds = new ArrayList<>();
             while (rsPostgreSQL.next()) {
-                productos.add(rsPostgreSQL.getInt("id_producto"));
+                tratamientosIds.add(rsPostgreSQL.getInt("id_tratamiento"));
             }
 
-            // Si no se encontraron productos para esta categoría
-            if (productos.isEmpty()) {
-                System.out.println("No hay productos en esta categoría.");
+            // Si no se encontraron tratamientos para esta especialidad
+            if (tratamientosIds.isEmpty()) {
+                System.out.println("No se encontraron tratamientos para la especialidad con ID: " + idEspecialidad);
                 return;
             }
 
-            // Paso 2: Obtener los usuarios de MySQL que compraron esos productos
-            // Convertir la lista de productos a una cadena de valores
+            // Paso 2: Crear consulta dinámica en MySQL para buscar pacientes con esos tratamientos
+            // Convertir la lista de tratamientos a una cadena de valores
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < productos.size(); i++) {
+            for (int i = 0; i < tratamientosIds.size(); i++) {
                 sb.append("?");
-                if (i < productos.size() - 1) {
+                if (i < tratamientosIds.size() - 1) {
                     sb.append(", ");
                 }
             }
 
-            // Consulta para obtener los usuarios que compraron los productos de la lista
-            String queryMySQL = "SELECT DISTINCT u.nombre " +
-                    "FROM usuarios u " +
-                    "JOIN pedidos p ON u.id_usuario = p.id_usuario " +
-                    "JOIN pedidos_productos pp ON p.id_pedido = pp.id_pedido " +
-                    "WHERE pp.id_producto IN (" + sb.toString() + ")";
+            // Consulta para obtener los pacientes que compraron los tratamientos de la lista
+            String queryMySQL = "SELECT DISTINCT p.id_paciente, p.nombre, p.email, p.fecha_nacimiento " +
+                    "FROM pacientes p " +
+                    "JOIN pacientes_tratamientos pt ON p.id_paciente = pt.id_paciente " +
+                    "WHERE pt.id_tratamiento IN (" + sb.toString() + ")";
             PreparedStatement stmtMySQL = SingletonMySQL.connection.prepareStatement(queryMySQL);
 
-            // Asignar los valores de los productos a la consulta
-            for (int i = 0; i < productos.size(); i++) {
-                stmtMySQL.setInt(i + 1, productos.get(i));
+            // Asignar los valores de los tratamientos a la consulta
+            for (int i = 0; i < tratamientosIds.size(); i++) {
+                stmtMySQL.setInt(i + 1, tratamientosIds.get(i));
             }
 
             ResultSet rsMySQL = stmtMySQL.executeQuery();
 
-            // Paso 3: Mostrar los nombres de los usuarios
-            boolean usuariosEncontrados = false;
+            // Paso 3: Mostrar los nombres de los pacientes
+            boolean pacientesEncontrados = false;
             while (rsMySQL.next()) {
-                String nombreUsuario = rsMySQL.getString("nombre");
-                System.out.println("Usuario que compró un producto de la categoría: " + nombreUsuario);
-                usuariosEncontrados = true;
+                String nombre = rsMySQL.getString("nombre");
+                String email = rsMySQL.getString("email");
+                Date fechaNacimiento = rsMySQL.getDate("fecha_nacimiento");
+
+                System.out.println("Paciente:");
+                System.out.println("Nombre: " + nombre);
+                System.out.println("Email: " + email);
+                System.out.println("Fecha de nacimiento: " + fechaNacimiento);
+                System.out.println("----------------------------------------");
+
+                pacientesEncontrados = true;
             }
 
-            if (!usuariosEncontrados) {
-                System.out.println("No hay usuarios que hayan comprado productos de esta categoría.");
+            if (!pacientesEncontrados) {
+                System.out.println("No hay pacientes que hayan contratado tratamientos de esta especialidad.");
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
-
 }
