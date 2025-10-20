@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS hospital.salas_tratamientos
 		ON DELETE CASCADE ON UPDATE CASCADE    
 );
 
-INSERT INTO hospital.especialidades(nombre_espacialidad) VALUES
+INSERT INTO hospital.especialidades(nombre_especialidad) VALUES
 ('Dermatología'),
 ('Cirugía Estética'),
 ('Oncología'),

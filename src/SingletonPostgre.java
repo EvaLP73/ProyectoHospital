@@ -8,7 +8,7 @@ public class SingletonPostgre{
     String dbURL = "jdbc:postgresql://localhost:5432/"; // URL de conexión
     String user = "postgres"; // Usuario de la base de datos
     String password = "abc123."; // Contraseña de la base de datos
-    String databaseName = "almacenPostGre"; // Nombre de la base de datos
+    String databaseName = "hospital_postgre"; // Nombre de la base de datos
 
     // El constructor del singleton siempre debe ser privado para evitar llamadas de construcción directas con el operador `new`.
     private SingletonPostgre(){

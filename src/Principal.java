@@ -182,7 +182,7 @@ public class Principal {
         PreparedStatement ps = null;
 
         try {
-            String sql = "INSERT INTO hospital.especialidad (nombre_especialidad) VALUES (?)";
+            String sql = "INSERT INTO hospital.especialidades (nombre_especialidad) VALUES (?)";
 
             ps = SingletonPostgre.connection.prepareStatement(sql);
             ps.setString(1, nombreEspecialidad); // Asignar el parámetro de la especialidad
@@ -236,7 +236,7 @@ public class Principal {
 
         try {
             // Primero, comprobamos si el medico existe con el ID proporcionado
-            String checkSql = "SELECT id_medico FROM medicos WHERE id_medico = ?";
+            String checkSql = "SELECT id_medico FROM hospital.medicos WHERE id_medico = ?";
             psCheck = SingletonPostgre.connection.prepareStatement(checkSql);
             psCheck.setInt(1, id); // Asignar el ID del medico
 

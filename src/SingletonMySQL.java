@@ -7,13 +7,13 @@ public class SingletonMySQL{
     static Connection connection;
     private final String usuario = "root";
     private final String clave = "abc123.";
-    private final String url ="jdbc:mysql://localhost:3306/ventasMySQL";
+    private final String url ="jdbc:mysql://localhost:3306/hospital_mysql";
 
     // El constructor del singleton siempre debe ser privado para evitar llamadas de construcción directas con el operador `new`.
     private SingletonMySQL(){
         try {
             this.connection = DriverManager.getConnection(url, usuario, clave);
-            System.out.println("Conexión exitosa a la base de datos: ventasMySQL" );
+            System.out.println("Conexión exitosa a la base de datos: hospital_mysql" );
         }catch(SQLException sqle) {
             System.out.println("Error al abrir la conexión");
         }
